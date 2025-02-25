@@ -1,0 +1,4 @@
+aws_eks/*.pem
+aws_eks/*.tfstate
+aws_eks/.terraform/*
+aws_eks/.terraform
