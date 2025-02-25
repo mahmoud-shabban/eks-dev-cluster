@@ -72,6 +72,8 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
 
 kubectl patch service prometheus-grafana -n monitoring -p '{"spec":{"type":"NodePort"}}'
 
+sleep 15
+
 cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: Ingress
