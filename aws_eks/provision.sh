@@ -38,24 +38,29 @@ helm install prometheus -n monitoring --create-namespace prometheus-community/ku
 
 # Install Load balancer controller
 curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
+
+# clean previous runs
+eksctl delete iamserviceaccount \
+    --cluster=dev-cluster \
+    --namespace=kube-system \
+    --name=aws-load-balancer-controller \
+    --region=us-east-1
+
+aws iam delete-policy \
+    --policy-arn arn:aws:iam::$1:policy/AWSLoadBalancerControllerIAMPolicy 
+
 aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy \
     --policy-document file://iam-policy.json 
 
-eksctl delete iamserviceaccount \
---cluster=dev-cluster \
---namespace=kube-system \
---name=aws-load-balancer-controller \
---region us-east-1
-
 eksctl create iamserviceaccount \
---cluster=dev-cluster \
---namespace=kube-system \
---name=aws-load-balancer-controller \
---attach-policy-arn=arn:aws:iam::$1:policy/AWSLoadBalancerControllerIAMPolicy \
---override-existing-serviceaccounts \
---region us-east-1 \
---approve
+    --cluster=dev-cluster \
+    --namespace=kube-system \
+    --name=aws-load-balancer-controller \
+    --attach-policy-arn=arn:aws:iam::$1:policy/AWSLoadBalancerControllerIAMPolicy \
+    --override-existing-serviceaccounts \
+    --region=us-east-1 \
+    --approve
 
 
 helm repo add eks https://aws.github.io/eks-charts
