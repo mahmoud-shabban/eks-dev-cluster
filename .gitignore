@@ -3,3 +3,4 @@ aws_eks/*.tfstate
 aws_eks/*.tfstate.backup
 aws_eks/.terraform/*
 aws_eks/.terraform
+aws_eks/grafana-ingress.yml
